@@ -4,7 +4,7 @@ provider "aws" {
 
 module "terraform_ci_cd" {
   source            = "../.."
-  terraform_version = "0.11.8"
+  terraform_version = "0.12.31"
   product_domain    = "beii"
   environment       = "staging"
 

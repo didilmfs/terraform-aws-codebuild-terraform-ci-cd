@@ -1,5 +1,5 @@
 locals {
-  name = "${var.product_domain}-terraform-aws"
+  name = "${var.product_domain}-terraform-${var.target_platform}"
 
   #############
   # CI LOCALS #
@@ -101,7 +101,7 @@ locals {
 
 module "aws_s3_bucket_artifact_name" {
   source        = "github.com/traveloka/terraform-aws-resource-naming.git?ref=v0.19.1"
-  name_prefix   = "${var.product_domain}-terraform-ci-cd-${data.aws_caller_identity.current.account_id}"
+  name_prefix   = var.target_platform != "aws" ? "${var.target_platform}-${var.product_domain}-terraform-ci-cd-${data.aws_caller_identity.current.account_id}" : "${var.product_domain}-terraform-ci-cd-${data.aws_caller_identity.current.account_id}"
   resource_type = "s3_bucket"
 }
 
@@ -213,6 +213,14 @@ resource "aws_codebuild_webhook" "ci" {
       type    = "BASE_REF"
       pattern = "refs/heads/master"
     }
+
+    dynamic "filter" {
+      for_each = var.additional_ci_webhook_filters
+      content {
+        type    = filter.value.type
+        pattern = filter.value.pattern
+      }
+    }
   }
 }
 
@@ -305,6 +313,14 @@ resource "aws_codebuild_webhook" "cd" {
     filter {
       type    = "HEAD_REF"
       pattern = "refs/heads/master"
+    }
+
+    dynamic "filter" {
+      for_each = var.additional_cd_webhook_filters
+      content {
+        type    = filter.value.type
+        pattern = filter.value.pattern
+      }
     }
   }
 }

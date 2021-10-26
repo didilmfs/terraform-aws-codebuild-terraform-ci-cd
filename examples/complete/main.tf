@@ -4,9 +4,10 @@ provider "aws" {
 
 module "terraform_ci_cd" {
   source            = "../.."
-  terraform_version = "0.11.8"
+  terraform_version = "0.12.31"
   product_domain    = "beii"
   environment       = "staging"
+  target_platform   = "aws"
 
   source_repository_url = "https://github.com/traveloka/terraform-aws-cicd-test.git"
 
@@ -42,6 +43,13 @@ module "terraform_ci_cd" {
     "echo 'custom command 2'",
   ]
 
+  additional_ci_webhook_filters = [
+    {
+      type    = "FILE_PATH"
+      pattern = "tvlk-dev/*"
+    }
+  ]
+
   cd_env_var = [
     {
       "name"  = "MY_SECRET"
@@ -72,5 +80,12 @@ module "terraform_ci_cd" {
   cd_post_build_commands = [
     "echo 'custom command 1'",
     "echo 'custom command 2'",
+  ]
+
+  additional_cd_webhook_filters = [
+    {
+      type    = "FILE_PATH"
+      pattern = "tvlk-dev/*"
+    }
   ]
 }

@@ -131,3 +131,35 @@ variable "cd_post_build_commands" {
   default     = []
   description = "Commands for CD's post_build phase"
 }
+
+# Sample argument value
+# additional_ci_webhook_filters = [
+#   {
+#       type    = "FILE_PATH"
+#       pattern = "tvlk-dev/*"
+#   }
+# ]
+variable "additional_ci_webhook_filters" {
+  type        = list(object({ type = string, pattern = string }))
+  description = "List of additional webhook filters for CI job."
+  default     = []
+}
+
+# Sample argument value
+# additional_cd_webhook_filters = [
+#   {
+#       type    = "FILE_PATH"
+#       pattern = "tvlk-dev/*"
+#   }
+# ]
+variable "additional_cd_webhook_filters" {
+  type        = list(object({ type = string, pattern = string }))
+  description = "List of additional webhook filters for CD job."
+  default     = []
+}
+
+variable "target_platform" {
+  type        = string
+  description = "Target platform for ci-cd implementation"
+  default     = "aws"
+}
