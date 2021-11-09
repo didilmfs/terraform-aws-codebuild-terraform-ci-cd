@@ -77,8 +77,11 @@ locals {
     // Upload Apply Artifact to S3 Bucket
     ". cd-upload-apply-artifact.sh",
 
-    //Update latest-commit-apply on S3 Bucket
+    // Update latest-commit-apply on S3 Bucket
     ". cd-update-latest-commit-apply.sh",
+
+    // Notify Apply Output to Github Pull Request
+    "cd-notify-apply-output-to-github-pr.py",
   ]
 
   # CI Buildspec
